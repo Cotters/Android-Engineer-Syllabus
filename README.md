@@ -1,0 +1,1 @@
+As I am preparing for interviews, I'm writing notes on Android development to refresh my knowledge. This repo will (hopefully) contain notes in a well structured way to aid in learning Android app development in 2025.
