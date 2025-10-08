@@ -126,6 +126,7 @@ https://tdcolvin.medium.com/
 	- [ ] SSL Pinning
 	- [ ] EncryptedSharedPreferences & Room Encryption
 	- [ ] SafetyNet / Play Integrity API
+- [ ] System Design
 - [ ] Scaling Apps
 	- [ ] Modularisation at scale
 	- [ ] Feature flags & A/B testing
