@@ -9,3 +9,5 @@ The crucial benefit of using Credential Manager is the use of Passkeys. Passkeys
 
 > At the time of writing, the most common security vulnerability listed in [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/) is 'Improper Credential Usage', so getting authentication right is very important.
 
+Credential Manager automatically displays a unified bottom sheet for modern authentication methods, making it a seamless experience on Android.
+
