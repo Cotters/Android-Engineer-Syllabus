@@ -5,11 +5,11 @@ https://github.com/amitshekhariitbhu/android-interview-questions
 https://tdcolvin.medium.com/
 ## Kotlin & Language Mastery
 - [ ] Advanced Kotlin
-	- [ ] Inline, Reified, and Reified Generics (2 hours)
-	- [ ] Extension Functions & Properties (1 hour)
-	- [ ] Delegates (lazy, observable, custom) (1 hour)
-	- [ ] Sealed Classes & Interfaces (1 hour)
-	- [ ] Data Classes & Copying (1 hour)
+	- [ ] Inline, Reified, and Reified Generics
+	- [ ] Extension Functions & Properties
+	- [ ] Delegates (lazy, observable, custom)
+	- [ ] Sealed Classes & Interfaces
+	- [ ] Data Classes & Copying
 	- [ ] Coroutines Deep Dive
 		- [ ] Structured Concurrency
 		- [ ] Dispatchers & Threading
