@@ -50,11 +50,10 @@ newsApi.fetchLatestNews()
 These intermediate operators are lazily constructed chain of operations; they do not create a flow, but operate on the flow when it is created. On the other hand, when a terminal operator is applied to a flow, the flow is created on demand and starts emitting values.
 ## Terminal Operators
 
-We have seen intermediate operators like `map` that applies an operation to a flow, so now let's look at observing these flows with terminal operators like `collect`.
-Each time you call `collect`, a new flow is created. The flow will then start emitting values.
+Each time a terminal operator such as `collect` is used on a Cold Flow, a new flow is created which will only then start emitting values. Hot Flows are created independently of terminal operators, which we'll explore below.
 
 Other useful operators include `first` and `toList`.
-### Cold Flow vs Hot Flow
+## Cold Flow vs Hot Flow
 
 Cold Flows are like a function call whereas Hot Flows are like broadcasts; Cold Flows execute independently whereas Hot Flows are ongoing events you can tune into.
 
@@ -69,7 +68,35 @@ Cold Flows will re-execute the producer code (e.g. fetching data from an API) fo
 | **Producer**     | Re-executes for each collector | Single active instance  |
 ## StateFlow
 
-StateFlow is a type of Hot Flow and is useful for persisting and re-using values produced by a flow, such as UI state.
+StateFlow is a type of Hot Flow and is useful for persisting and re-using values produced by a flow, such as UI state. StateFlow's hold the most recently emitted value.
 
-For example, if we rotate our device, we don't want the flow to call our API again to fetch the same data we had before. Instead, we can use StateFlow which acts as a buffer and stores the values from our API, re-emitting the same values once our view is recreated.
+This is useful for avoiding unnecessary fetching of information we already have. For example, if we rotate our device, we don't want the flow to call our API again to fetch the same data we had before. Instead, we can use StateFlow which acts as a buffer and stores the values from our API, re-emitting the same values once our view is recreated.
+
+## ShareIn
+
+An important operator that converts a cold flow into a (hot) Shared Flow.
+
+This operator provides more control over a flow and is useful when there is expensive computation. If we are fetching data from a backend and the connection takes a long time, we can create a cold flow, then use the `shareIn` operator with some additional parameters to control how this connection starts and what values we store and receive.
+
+```kotlin
+fun <T> Flow<T>. shareIn(
+	scope: CoroutineScope, 
+	started: SharingStarted,
+	replay: Int = 0
+): SharedFlow<T>
+```
+
+If we have an expensive call to our backend, and we want to create a single shared upstream source for multiple subscribes, we can define the expensive backend call as a cold flow and then use the `shareIn` operator inside an application level, session level, or repository level scope and have multiple subscribes use that stream. We then use the `SharingStarted`  parameter to control when the cold flow block executes.
+
+`SharingStarted` configures the flow in the following ways:
+- `Eagerly` starts the upstream flow before any subscribes.
+- `Lazily` starts the upstream flow when it has it's first subscriber.
+- `WhileSubscribed` starts the upstream flow lazily and stops it when it has no subscribes. You can configure a timeout delay to prevent restarting flows which can happen when switching between screens, for example.
+
+## Buffers and Replays
+
+Buffers allow subscribers to lag behind the upstream flows emitted values, whereas replay defines the amount of previously emitted values new subscribers receive when they subscribe to an upstream flow.
+This means that buffers are non-blocking (allows the upstream flow to continue emitting values) and replays are blocking, as it requires each subscriber to process the values before continuing.
+
+By default, MutableSharedFlow doesn't use a buffer, so emitting is suspended until all subscribers receive the emitted value.
 
